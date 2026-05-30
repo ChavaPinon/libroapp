@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-// Resolve the public origin (works locally and on Vercel) for OAuth redirects.
+// Resolve the public origin (works locally and on Vercel) for the magic-link
+// redirect target.
 async function getOrigin() {
   const h = await headers();
   const origin = h.get("origin");
@@ -12,21 +13,6 @@ async function getOrigin() {
   const host = h.get("x-forwarded-host") ?? h.get("host");
   const proto = h.get("x-forwarded-proto") ?? "https";
   return `${proto}://${host}`;
-}
-
-/** Start Google OAuth — redirects the user to Google's consent screen. */
-export async function signInWithGoogle() {
-  const supabase = await createClient();
-  if (!supabase) redirect("/login?error=demo"); // Supabase not configured yet
-  const origin = await getOrigin();
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: `${origin}/auth/callback` },
-  });
-
-  if (error || !data.url) redirect("/login?error=google");
-  redirect(data.url);
 }
 
 /** Send a magic-link email. Returns a status the form can show. */
