@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Semantic design tokens. These default values are the "Midnight" theme;
+   the ThemeProvider overrides them at runtime from the user's saved theme.
+   NO component should hardcode a color — only consume these via Tailwind
+   utilities (bg-surface-1, text-muted, text-primary, border-app, ...).
+--------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Defaults = "Estudio Día" (pergamino). The ThemeProvider overrides these
+     at runtime from the user's saved theme; kept in sync with lib/themes.ts. */
+  --bg: #f3eadb;
+  --surface-1: #fbf6ec;
+  --surface-2: #efe3d0;
+  --surface-3: #e6d8c0;
+  --border: #ddccb0;
+
+  --text: #3a2f25;
+  --text-muted: #7a6a55;
+  --text-subtle: #a3927a;
+
+  --primary: #6f4e2e;
+  --primary-hover: #5c3f24;
+  --primary-fg: #fbf6ec;
+  --accent: #4f6f52;
+
+  --success: #5c8a4a;
+  --warning: #c98a3c;
+  --danger: #b04a3a;
+  --info: #5a7a8c;
+
+  --star: #c9972b;
+  --progress: #6f4e2e;
+
+  --radius: 0.5rem;
 }
 
+/* Map semantic tokens into Tailwind's theme so utilities are generated. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border-app: var(--border);
+
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --color-star: var(--star);
+  --color-progress: var(--progress);
+
+  --radius-app: var(--radius);
+
+  --font-sans: var(--font-sans-app);
+  --font-serif: var(--font-serif-app), Georgia, "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans-app), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings get the literary serif for the classic "study" feel. */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-serif-app), Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* Smooth theme transitions, but never on layout-affecting properties. */
+body * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+/* Custom scrollbar tuned to the theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
 }
